@@ -1,0 +1,25 @@
+@use './variables' as *;
+
+.assetList {
+  width: 90%;
+  height: auto;
+  .listHeader {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1rem; 
+    padding: 1rem;
+    background: $background-secondary;
+    border-bottom: 1px solid $border-color;
+    font-weight: 600;
+    color: $text-secondary;
+  }
+
+  .listContainer {
+    width: 100%;
+    height: auto;
+    
+    @media (max-width: 768px) {
+      height: 400px;
+    }
+  }
+}
