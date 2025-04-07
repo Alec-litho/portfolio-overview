@@ -7,7 +7,7 @@ export interface Asset {
 }
 
 export interface CryptoData {
-  symbol: string;
-  price: number;
-  change: number;
+  s: string;
+  A: number;
+  P: number;
 }

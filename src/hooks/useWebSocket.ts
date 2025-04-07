@@ -1,23 +1,21 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { CryptoData } from "../types";
 import { throttle } from "../helpers/throttle";
-import { Asset } from "../types";
-
 
 export const useWebSocket = (updateInterval: number) => {
-  const [data, setData] = useState<Asset[] | []>([]);
-  const [error, setError] = useState<Error | null>(null);
+  const [data, setData] = useState<CryptoData[] | []>([]);
   const wsRef = useRef<WebSocket | null>(null);
   const lastUpdateRef = useRef<number>(0);
   const intervalMs = updateInterval;
 
   const handleMessage = useCallback(
-    throttle((message: WebSocketMessage) => {
+    throttle((message) => {
       try {
         const newData = JSON.parse(message.data);
         setData(newData);
         lastUpdateRef.current = Date.now();
       } catch (err) {
-        setError(err instanceof Error ? err : new Error("Failed"));
+        console.error(err);
       }
     }, intervalMs),
     [intervalMs]
@@ -29,20 +27,15 @@ export const useWebSocket = (updateInterval: number) => {
 
       ws.onopen = () => {
         console.log("WebSocket connected");
-        setError(null);
       };
 
-      ws.onmessage = (message: WebSocketMessage) => {
+      ws.onmessage = (message) => {
         const now = Date.now();
 
         if (now - lastUpdateRef.current >= intervalMs) {
           console.log("w");
           handleMessage(message);
         }
-      };
-
-      ws.onerror = (err) => {
-        setError(new Error(`WebSocket error: ${err}`));
       };
 
       ws.onclose = () => {
@@ -61,5 +54,5 @@ export const useWebSocket = (updateInterval: number) => {
     };
   }, [intervalMs, handleMessage]);
 
-  return { data, error };
+  return data;
 };

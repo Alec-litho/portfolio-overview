@@ -2,16 +2,19 @@
 
 .assetList {
   width: 90%;
-  height: auto;
+  height: auto; 
   .listHeader {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 1rem; 
-    padding: 1rem;
+    grid-template-columns: repeat(6, calc(100% / 6));
+    padding: 1rem; 
     background: $background-secondary;
     border-bottom: 1px solid $border-color;
     font-weight: 600;
     color: $text-secondary;
+
+    h3 {
+      margin: 0;
+    }
   }
 
   .listContainer {

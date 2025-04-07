@@ -2,12 +2,12 @@
 
 .assetRow {
   box-sizing: border-box;
-  width: 100%;
+  width: 100%; 
   display: grid;
   grid-template-columns: repeat(6, calc(100% / 6));
   padding: 15px;
   border-bottom: 1px solid $border-color;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease; 
   cursor: pointer;
 
   &:hover {
