@@ -22,24 +22,28 @@ const portfolioSlice = createSlice({
       state.assets = filteredAssets;
     },
     updateAssets: (state, action: PayloadAction<CryptoData[]>) => {
-      const symbols = state.assets.map((asset) => asset.symbol);
-      const newAssets: Asset[] = [];
-      action.payload.forEach((data) => {
-        if (symbols.includes(data.s)) {
-          const asset = state.assets.filter((asset) => asset.symbol === data.s)[0];
-          newAssets.push({
-            id: asset.id,
-            symbol: asset.symbol,
-            amount: asset.amount,
-            price: data.A,
-            change24h: data.P,
-          });
-        }
+      const cryptoData = action.payload;
+      
+      const priceMap = new Map();
+      cryptoData.forEach(data => {
+        priceMap.set(data.s, { 
+          price: data.A, 
+          change24h: data.P
+        });
       });
 
-      const isEmpty = newAssets.length > 0;
-      localStorage.setItem("assets", JSON.stringify(isEmpty ? newAssets : state.assets));
-      if (isEmpty) state.assets = newAssets;
+      state.assets = state.assets.map(asset => {
+        const cryptoInfo = priceMap.get(asset.symbol);
+        if (cryptoInfo) {
+          return {
+            ...asset,
+            price: cryptoInfo.price,
+            value: asset.amount * cryptoInfo.price,
+            change24h: cryptoInfo.change24h
+          };
+        }
+        return asset;
+      });
     },
   },
 });

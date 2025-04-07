@@ -11,7 +11,8 @@ import { Asset, CryptoData } from "./types";
 
 export function Portfolio() {
   const assets = useAppSelector((state) => state.portfolio);
-  const totalValue = useMemo(() => assets.assets.reduce((sum: number, asset: Asset) => sum + asset.amount * asset.price, 0), [assets]);
+  console.log(assets.assets)
+  const totalValue = useMemo(() => assets.assets.reduce((sum: number, asset: Asset) => sum += asset.amount, 0), [assets]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string | null>(null);
 

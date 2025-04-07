@@ -8,9 +8,9 @@ interface AssetRowProps {
   totalValue: number;
 }
 
-export default function AssetRow({ asset, totalValue }: AssetRowProps) {
+export default function AssetRow({ asset, totalValue}: AssetRowProps) {
   const dispatch = useAppDispatch();
-  const percentage = ((asset.amount * asset.price) / totalValue) * 100;
+  const percentage = (asset.amount / totalValue) * 100;
 
   const formatCurrency = (value: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
 
