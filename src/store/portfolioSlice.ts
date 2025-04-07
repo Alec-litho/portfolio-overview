@@ -5,7 +5,7 @@ const loadFromLocalStorage = () => {
   return JSON.parse(localStorage.getItem("assets") || "[]");
 };
 
-const initialState: { assets: Asset[] | [] } = { assets: loadFromLocalStorage() };
+const initialState: { assets: Asset[] } = { assets: loadFromLocalStorage() };
 
 const portfolioSlice = createSlice({
   name: "portfolio",
