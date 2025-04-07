@@ -33,14 +33,14 @@ https://alec-litho.github.io/portfolio-overview/
 
 3. Работа с данными:
  - useWebSocket (кастомный хук) – Подключение к WebSocket API для получения актуальных цен.
- - - Использует throttle для оптимизации частоты обновлений.
+   - Использует throttle для оптимизации частоты обновлений.
  - Данные передаются в updateAssets для синхронизации с Redux.
  - AssetModal загружает список доступных валют из внешнего API.
 
 4. Поток данных:
- - - Пользователь добавляет валюту через AssetModal → addAsset в Redux.
- - - useWebSocket получает новые цены → updateAssets обновляет состояние.
- - - AssetList рендерит данные через AssetRow с виртуализацией.
+   - Пользователь добавляет валюту через AssetModal → addAsset в Redux.
+   - useWebSocket получает новые цены → updateAssets обновляет состояние.
+   - AssetList рендерит данные через AssetRow с виртуализацией.
 
 ## Используемые библиотеки
 
