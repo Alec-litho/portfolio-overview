@@ -1,54 +1,65 @@
-# React + TypeScript + Vite
+# Portfolio-overview test-task
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## run locally:
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### install dependencies:
+```
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+### Compiles and hot-reloads for development:
 ```
+npm run dev
+```
+
+## see app on github-pages:
+
+https://alec-litho.github.io/portfolio-overview/
+
+## Архитектура приложения
+
+1. Структура компонентов:
+ - Portfolio (страница) – Главный компонент, который объединяет:
+ - AssetList – Виртуализированный список (через react-window) для отображения всех активов.
+ - AssetRow – Отдельная строка с данными актива (цена, количество, доля и т. д.).
+ - AssetModal – Модальное окно для добавления новых активов в портфель.
+
+2. Управление состоянием:
+ - portfolioSlice (Redux Toolkit) – Единственный стор с функциями:
+ 1. addAsset – Добавление валюты.
+ 2. removeAsset – Удаление валюты.
+ 3. updateAssets – Обновление данных в реальном времени.
+ 4. Локальное хранилище (localStorage) – Сохранение портфеля при обновлении.
+
+3. Работа с данными:
+ - useWebSocket (кастомный хук) – Подключение к WebSocket API для получения актуальных цен.
+ 1. Использует throttle для оптимизации частоты обновлений.
+ - Данные передаются в updateAssets для синхронизации с Redux.
+ - AssetModal загружает список доступных валют из внешнего API.
+
+4. Поток данных:
+ 1. Пользователь добавляет валюту через AssetModal → addAsset в Redux.
+ 2. useWebSocket получает новые цены → updateAssets обновляет состояние.
+ 3. AssetList рендерит данные через AssetRow с виртуализацией.
+
+## Используемые библиотеки
+
+### Основные зависимости
+
+ - `@reduxjs/toolkit` (^2.6.1) - Упрощенная версия Redux для управления глобальным состоянием приложения. Позволяет создавать хранилище, редюсеры и actions с минимальным количеством кода.
+
+ - `react` (^19.0.0) и `react-dom` (^19.0.0) - Библиотеки React для создания пользовательского интерфейса. Версия 19 включает новые оптимизации и возможности.
+
+ - `react-window` (^1.8.11) - Библиотека для эффективного рендеринга больших списков. Использует виртуализацию для оптимизации производительности.
+
+ - `socket.io-client` (^4.8.1) - Клиентская библиотека для установки WebSocket-соединения с сервером Binance API.
+
+ - `uuid` (^11.1.0) - Генератор уникальных идентификаторов. Используется для создания ID новых активов в портфеле.
+
+### Dev-зависимости
+
+- `vite` (^6.2.0) - Современный сборщик проектов, обеспечивающий быструю разработку и сборку.
+
+- `typescript` (~5.7.2) - Статическая типизация JavaScript-кода.
+
+- `sass` (^1.86.3) - Препроцессор CSS для написания стилей с дополнительными возможностями.
