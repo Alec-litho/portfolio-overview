@@ -1,7 +1,6 @@
 import { useState } from "react";
 import "../assets/AssetModal.scss";
 import { CryptoData } from "../types";
-import { FixedSizeList as List } from "react-window";
 
 interface AddAssetModalProps {
   onClose: () => void;
@@ -11,10 +10,9 @@ interface AddAssetModalProps {
   setSearchQuery: (query: string) => void;
 }
 
-export function AddAssetModal({ onClose, assets, onAdd, searchQuery, setSearchQuery }: AddAssetModalProps) {
+export function AssetModal({ onClose, assets, onAdd, searchQuery, setSearchQuery }: AddAssetModalProps) {
   const [amount, setAmount] = useState("");
   const [selectedAsset, setSelectedAsset] = useState<CryptoData | null>(null);
-
   const handleSubmit = () => {
     if (selectedAsset && amount) {
       onAdd(selectedAsset, parseFloat(amount));
@@ -22,40 +20,21 @@ export function AddAssetModal({ onClose, assets, onAdd, searchQuery, setSearchQu
     }
   };
 
-  // function Row({ index }: { index: number; style: React.CSSProperties }){
-  //   const asset = assets[index];
-  //   return (
-  //     <div key={asset.s} className={`assetItem ${selectedAsset?.s === asset.s ? "selected" : ""}`} onClick={() => setSelectedAsset(asset)}>
-  //     <span>{asset.s}</span>
-  //     <span>${asset.p}</span>
-  //     <span className={asset.c >= 0 ? "positive" : "negative"}>{asset.c}%</span>
-  //   </div>
-  //   );
-  // };
-  console.log("upd");
   return (
     <div className="modalOverlay">
       <div className="modalContent">
-        <h2>Выберите валюту</h2>
-        <input type="text" placeholder="Поиск..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+        <div className="modalHeader">
+          <h2>Выберите валюту</h2>
+          <input type="text" placeholder="Поиск..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
+        </div>
 
-        {/* <List
-         className="assetListModal"
-              height={400}
-              width="100%"
-              itemCount={assets.length}
-              itemSize={60} 
-              overscanCount={15}
-            >
-              {Row}
-            </List> */}
         <div className="assetListModal">
           {assets.map((asset) => {
             return (
               <div key={asset.s} className={`assetItem ${selectedAsset?.s === asset.s ? "selected" : ""}`} onClick={() => setSelectedAsset(asset)}>
                 <span>{asset.s}</span>
-                <span>${asset.p}</span>
-                <span className={asset.c >= 0 ? "positive" : "negative"}>{asset.c}%</span>
+                <span>${asset.A}</span>
+                <span className={Number(asset.P) >= 0 ? "positive" : "negative"}>{Number(asset.P).toFixed(2)}%</span>
               </div>
             );
           })}
@@ -67,8 +46,10 @@ export function AddAssetModal({ onClose, assets, onAdd, searchQuery, setSearchQu
         </div>
 
         <div className="modalActions">
-          <button onClick={onClose}>Отмена</button>
-          <button onClick={handleSubmit} disabled={!selectedAsset || !amount}>
+          <button onClick={onClose} className="btn-danger">
+            Отмена
+          </button>
+          <button onClick={handleSubmit} disabled={!selectedAsset || !amount} className="btn-success">
             Добавить
           </button>
         </div>
